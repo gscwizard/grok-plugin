@@ -45,13 +45,13 @@ The plugin bundles:
 | --- | --- | --- |
 | MCP server | `.mcp.json` | Remote GSC Wizard server registration |
 | Agent | `agents/seo-analyst.md` | Specialized SEO analyst subagent |
-| Skills | `skills/` | **gsc-wizard-mcp** (how to use the MCP: tool choice, dates, row caps, scope, errors — plus a full tool map), then the workflows: weekly-seo-report, ranking-changes, cannibalization, content-decay, ctr-opportunities, seo-opportunities |
+| Skills | `skills/` | **gsc-wizard-mcp** (how to use the MCP: tool choice, dates, row caps, scope, errors & a full tool map), then the workflows: weekly-seo-report, ranking-changes, cannibalization, content-decay, ctr-opportunities, seo-opportunities |
 | Commands | `commands/` | `/gsc-report`, `/gsc-rankings`, `/gsc-decay`, `/gsc-cannibalization`, `/gsc-opportunities` |
 | Manifest | `.grok-plugin/plugin.json` | Plugin metadata |
 
-To put these on a schedule — daily exception watch, weekly diagnosis,
+To put these on a schedule for things like daily exception watch, weekly diagnosis,
 monthly executive report, and the annotate-wait-verify loop that checks
-whether your changes worked — follow
+whether your changes worked, follow
 [`docs/PLAYBOOK.md`](docs/PLAYBOOK.md).
 
 Authentication happens at connect time (browser OAuth flow, or an API-key
