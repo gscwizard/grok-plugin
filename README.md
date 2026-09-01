@@ -73,7 +73,7 @@ repository.**
 ## Support
 
 Product docs, account settings, and API keys live at
-[gscwizard.com](https://gscwizard.com). Problems with the plugin itself can
+[login at gscwizard.com](https://tool.gscwizard.com/account/api-keys). Problems with the plugin itself can
 be filed as an issue in this repository.
 
 ## License
