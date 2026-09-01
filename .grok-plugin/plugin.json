@@ -1,0 +1,20 @@
+{
+  "name": "gsc-wizard",
+  "description": "Analyze Google Search Console data with GSC Wizard: rankings, decay, cannibalization, CTR and opportunity analysis, all computed server-side.",
+  "version": "0.1.0",
+  "author": {
+    "name": "GSC Wizard",
+    "url": "https://gscwizard.com"
+  },
+  "homepage": "https://gscwizard.com",
+  "keywords": [
+    "seo",
+    "google-search-console",
+    "search-console",
+    "gsc",
+    "rankings",
+    "organic-search",
+    "content-decay",
+    "cannibalization"
+  ]
+}
