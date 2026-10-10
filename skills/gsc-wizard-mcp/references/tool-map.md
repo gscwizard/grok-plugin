@@ -1,7 +1,7 @@
 # GSC Wizard MCP tool map
 
-The full catalog, grouped by what you would reach for it. **106 tools: 76
-read, 30 write.** Read the parent [`SKILL.md`](../SKILL.md) first — it has the
+The full catalog, grouped by what you would reach for it. **126 tools: 94
+read, 32 write.** Read the parent [`SKILL.md`](../SKILL.md) first — it has the
 rules that matter (raw rows, dates, row caps, scope). This file is the lookup
 table for when the common tools do not cover the question.
 
@@ -10,7 +10,8 @@ Every date range is optional; omit it for the last 28 settled days.
 ## Discovery and account
 
 `list_sites` · `get_account_info` · `list_tags` · `get_inspection_quota` ·
-`list_saved_filters`
+`list_saved_filters` · `get_filter_options` (brand, content-group and
+topic-cluster filters a property supports)
 
 ## Search performance
 
@@ -55,7 +56,9 @@ Cross-property: `get_cross_site_summary` · `get_tag_group_view`
 
 `list_ga4_properties` · `get_ga4_overview` · `query_ga4_report` ·
 `get_ga4_ecommerce` · `get_ga4_key_events` · `get_ga4_llm_traffic` (AI
-assistant referrals) · `get_ga4_error_pages`
+assistant referrals) · `get_ga4_error_pages` · `list_ga4_custom_dimensions`
+(the property's own event parameters, with the `customEvent:` names) ·
+`query_ga4_custom_dimensions`
 
 Joined with Search Console: `get_blended_landing_pages` ·
 `get_query_value_attribution`
@@ -69,9 +72,45 @@ a state, not an error — report it and move on.
 `get_bing_page_stats` · `get_bing_query_page_stats` · `get_bing_crawl_stats` ·
 `get_bing_crawl_issues` · `get_bing_link_counts` (backlink counts) ·
 `get_bing_keyword_stats` (market demand, no siteUrl) · `get_bing_feeds` ·
-`get_bing_url_submission_quota`
+`get_bing_url_submission_quota` · `get_bing_page_queries` (the queries behind
+one landing page) · `get_bing_query_page_trend` (one query + page pair, daily)
 
 Same `notConfigured` rule when no Bing API key is set.
+
+## Yandex Webmaster
+
+`list_yandex_sites` · `get_yandex_site_summary` (site quality index, pages in
+search, open problems) · `get_yandex_query_stats` · `get_yandex_indexing_history`
+
+`get_yandex_query_stats` covers the top 3,000 queries of the past week only, so
+its totals are not the site total. Same `notConfigured` rule when Yandex is not
+connected.
+
+## Shopping (Google Merchant Center)
+
+- **Search Console side:** `get_merchant_listings_performance` (product rich
+  results in web Search only; `hasAppearance: false` is normal for a site
+  without product pages)
+- **Merchant Center side:** `list_gmc_accounts` ·
+  `get_organic_shopping_performance` (free listings across Shopping, Search,
+  Images, Lens, YouTube and Maps) · `get_product_listing_status` (which products
+  are limited or disapproved, ranked by click potential)
+- **Market insights:** `get_gmc_competitors` · `get_gmc_pricing_insights` ·
+  `get_gmc_best_sellers`
+- **Feed quality:** `get_feed_audit_results` · `get_gmc_title_hygiene`
+
+The two sides never reconcile to one number: Merchant Center counts more
+surfaces than web Search. Compare trends, not totals.
+
+Units differ from the rest of the server. In `get_gmc_competitors`,
+`relativeVisibility` and `adsOrganicRatio` are ratios (200 = two hundred times
+as often as you; your own domain is the 1x baseline), while the overlap,
+higher-position and trend fields are 0-1 fractions. Pricing changes, coverage
+and pass rates are 0-1 fractions too. Never multiply a ratio by 100.
+
+`notConfigured` means Merchant Center is not connected or no account is linked
+to the property. A grantee also needs the owner's Merchant Center opt-in on
+their invite.
 
 ## Reporting and sharing
 
@@ -95,7 +134,9 @@ read-only key rejects them by design.
   `manage_report_access` · `create_report_client`
 - **Indexing:** `submit_indexnow_urls` · `update_indexnow_settings` ·
   `add_tracked_urls` · `remove_tracked_urls` · `check_tracked_url_now` ·
-  `bulk_inspect_urls` (consumes daily inspection quota)
+  `bulk_inspect_urls` (consumes daily inspection quota) · `submit_sitemap`
+- **Shopping:** `run_feed_audit` (queues a feed audit that crawls every
+  product page; it can take hours, so follow up with `get_feed_audit_results`)
 - **Migrations:** `add_migration_redirects` · `delete_migration_redirects`
 
 `bulk_inspect_urls` is worth flagging even when a write key is present: it

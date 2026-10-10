@@ -5,8 +5,8 @@ description: Core rules for using the GSC Wizard MCP well - choosing the right t
 
 # Using the GSC Wizard MCP
 
-The server exposes over a hundred tools against real Search Console, GA4 and
-Bing data. Most mistakes come from four things: reaching for raw rows instead
+The server exposes over a hundred tools against real Search Console, GA4,
+Bing, Yandex and Google Merchant Center data. Most mistakes come from four things: reaching for raw rows instead
 of a finished analysis, guessing at dates, reporting a truncated list as if it
 were complete, and calling a write tool nobody asked for. This skill covers
 all four.
@@ -32,8 +32,9 @@ server-side, against the full dataset. Use it. `query_search_analytics` is a
 | Did something break on a specific day? | `detect_anomalies`, `detect_change_points`, `list_algo_updates` |
 | Client-ready report | `generate_seo_report` |
 | Is this URL indexed? | `inspect_url`, `bulk_inspect_urls` |
+| How do my products do in free listings? | `get_organic_shopping_performance`, `get_product_listing_status` |
 
-The full grouped catalog, including GA4 and Bing, is in
+The full grouped catalog, including GA4, Bing, Yandex and Merchant Center, is in
 [`references/tool-map.md`](references/tool-map.md).
 
 **Never re-derive what a tool already computed.** Do not average an average
@@ -111,7 +112,7 @@ tool. That is deliberate.
 | Error | What it means | What to do |
 | --- | --- | --- |
 | `forbidden` on a write tool | Read-only key | Report it; do not retry |
-| `notConfigured` from a GA4 or Bing tool | No GA4 property linked, or no Bing key | Say the integration is not connected; do not treat as an error or retry |
+| `notConfigured` from a GA4, Bing, Yandex or Merchant Center tool | That integration is not connected or linked to the property | Say the integration is not connected; do not treat as an error or retry |
 | Empty `list_sites` | Account has no connected properties | Point the user at connecting Search Console; do not guess a property |
 | Property not found | Wrong siteUrl format | Use the exact string from `list_sites` (`sc-domain:example.com` vs `https://example.com/`) |
 | Numbers disagree with the GSC UI | Almost always the date window | Compare periods and `settledThrough` before assuming a data problem |
