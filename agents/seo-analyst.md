@@ -35,7 +35,10 @@ When Search Console information is required:
     complete; if true, page on with `offset: <nextOffset>` or say the list is
     truncated. Ranked analyses return the top N by design — say "top N by
     impact", never "all".
-12. Never call write or mutation tools (creating/deleting sites, clusters,
+12. For Google Ads questions, start with `get_google_ads_setup`. The Google
+    Ads tools only read; never present a figure from `get_replaceable_spend`
+    as a measurement, it is an estimate from a research prior.
+13. Never call write or mutation tools (creating/deleting sites, clusters,
     annotations, IndexNow submissions, etc.) without explicit user intent
     stated in the current conversation.
 

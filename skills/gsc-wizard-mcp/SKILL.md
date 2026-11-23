@@ -6,7 +6,7 @@ description: Core rules for using the GSC Wizard MCP well - choosing the right t
 # Using the GSC Wizard MCP
 
 The server exposes over a hundred tools against real Search Console, GA4,
-Bing, Yandex and Google Merchant Center data. Most mistakes come from four things: reaching for raw rows instead
+Bing, Yandex, Google Merchant Center and Google Ads data. Most mistakes come from four things: reaching for raw rows instead
 of a finished analysis, guessing at dates, reporting a truncated list as if it
 were complete, and calling a write tool nobody asked for. This skill covers
 all four.
@@ -33,8 +33,10 @@ server-side, against the full dataset. Use it. `query_search_analytics` is a
 | Client-ready report | `generate_seo_report` |
 | Is this URL indexed? | `inspect_url`, `bulk_inspect_urls` |
 | How do my products do in free listings? | `get_organic_shopping_performance`, `get_product_listing_status` |
+| How do my Google Ads perform? Is the account set up well? | `get_google_ads_setup` first, then `get_google_ads_overview`, `get_google_ads_health` |
+| Do I pay for clicks I already win organically? | `get_paid_vs_organic`, `get_replaceable_spend` |
 
-The full grouped catalog, including GA4, Bing, Yandex and Merchant Center, is in
+The full grouped catalog, including GA4, Bing, Yandex, Merchant Center and Google Ads, is in
 [`references/tool-map.md`](references/tool-map.md).
 
 **Never re-derive what a tool already computed.** Do not average an average
@@ -113,6 +115,7 @@ tool. That is deliberate.
 | --- | --- | --- |
 | `forbidden` on a write tool | Read-only key | Report it; do not retry |
 | `notConfigured` from a GA4, Bing, Yandex or Merchant Center tool | That integration is not connected or linked to the property | Say the integration is not connected; do not treat as an error or retry |
+| `linked: false` from `get_google_ads_setup` | No Google Ads account is linked to the property | Offer to link one (google-ads-audit skill); never link without the user picking the account |
 | Empty `list_sites` | Account has no connected properties | Point the user at connecting Search Console; do not guess a property |
 | Property not found | Wrong siteUrl format | Use the exact string from `list_sites` (`sc-domain:example.com` vs `https://example.com/`) |
 | Numbers disagree with the GSC UI | Almost always the date window | Compare periods and `settledThrough` before assuming a data problem |

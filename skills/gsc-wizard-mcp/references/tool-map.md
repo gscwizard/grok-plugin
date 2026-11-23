@@ -1,7 +1,7 @@
 # GSC Wizard MCP tool map
 
-The full catalog, grouped by what you would reach for it. **126 tools: 94
-read, 32 write.** Read the parent [`SKILL.md`](../SKILL.md) first — it has the
+The catalog, grouped by what you would reach for it, covering the server's
+150+ tools apart from the rank checker set. Read the parent [`SKILL.md`](../SKILL.md) first: it has the
 rules that matter (raw rows, dates, row caps, scope). This file is the lookup
 table for when the common tools do not cover the question.
 
@@ -19,7 +19,7 @@ topic-cluster filters a property supports)
 `query_countries` · `query_devices` · `get_query_performance` ·
 `get_page_performance` · `get_position_distribution` ·
 `get_branded_performance` · `breakdown_by_path` · `get_sitemap_performance` ·
-`query_search_analytics` (raw rows — last resort)
+`query_search_analytics` (raw rows, last resort)
 
 Cross-property: `get_cross_site_summary` · `get_tag_group_view`
 
@@ -35,10 +35,16 @@ Cross-property: `get_cross_site_summary` · `get_tag_group_view`
 - **Demand shape:** `analyze_query_shapes` · `get_query_shape_trend`
 - **Data caveats:** `analyze_sampling_impact` (how much GSC is hiding)
 
-## Forecasting and experiments
+## Forecasting, experiments and migrations
 
-`forecast_traffic` · `list_experiments` · `get_experiment_results` ·
-`compare_migration` · `list_migration_redirects`
+`forecast_traffic` · `list_experiments` · `get_experiment_results`
+
+Migrations: `list_migrations` (migrations saved in the app) ·
+`get_migration_health` (recovery, pace, risk score, redirect status and
+recommendations around a go-live date; pass a `migrationId` from
+`list_migrations` or the properties plus `goLiveDate`) · `compare_migration`
+(before/after comparison; add `goLiveDate` for go-live windows) ·
+`list_migration_redirects`
 
 ## Indexing and technical
 
@@ -56,7 +62,8 @@ Cross-property: `get_cross_site_summary` · `get_tag_group_view`
 
 `list_ga4_properties` · `get_ga4_overview` · `query_ga4_report` ·
 `get_ga4_ecommerce` · `get_ga4_key_events` · `get_ga4_llm_traffic` (AI
-assistant referrals) · `get_ga4_error_pages` · `list_ga4_custom_dimensions`
+assistant referrals) · `get_ga4_error_pages` · `get_ga4_realtime_events`
+(live events, last 30 minutes) · `list_ga4_custom_dimensions`
 (the property's own event parameters, with the `customEvent:` names) ·
 `query_ga4_custom_dimensions`
 
@@ -64,7 +71,7 @@ Joined with Search Console: `get_blended_landing_pages` ·
 `get_query_value_attribution`
 
 A GA4 tool returning `notConfigured` means no GA4 property is linked. That is
-a state, not an error — report it and move on.
+a state, not an error: report it and move on.
 
 ## Bing Webmaster Tools
 
@@ -98,6 +105,12 @@ connected.
 - **Market insights:** `get_gmc_competitors` · `get_gmc_pricing_insights` ·
   `get_gmc_best_sellers`
 - **Feed quality:** `get_feed_audit_results` · `get_gmc_title_hygiene`
+- **Account and feed health:** `get_gmc_account_health` (account issues and
+  eligibility checks: terms of service, free-listings program, claimed website,
+  shipping, returns, business info) · `get_gmc_data_sources` (feeds and whether
+  their latest upload or fetch succeeded)
+- **Anything else:** `query_gmc_report` (raw MCQL; rows come back raw, with
+  money in micros and rates as 0-1 fractions, so prefer the tools above)
 
 The two sides never reconcile to one number: Merchant Center counts more
 surfaces than web Search. Compare trends, not totals.
@@ -112,12 +125,35 @@ and pass rates are 0-1 fractions too. Never multiply a ratio by 100.
 to the property. A grantee also needs the owner's Merchant Center opt-in on
 their invite.
 
+## Google Ads
+
+Every Google Ads tool reads GSC Wizard's stored copy of the linked accounts,
+synced daily from the Google Ads API; none of them can change anything in a
+Google Ads account. Cost is in the account currency, or converted into one
+report currency at ECB rates when `currencyConversion` says so; `ctr` and
+`conversionRate` are 0-100 percentages; ROAS is a ratio.
+
+- **Setup:** `get_google_ads_setup` (call first: links, history import,
+  sync errors, `historyGaps`, `accessLostAt`) · `list_google_ads_accounts`
+- **The account on its own:** `get_google_ads_overview` ·
+  `get_google_ads_search_terms` (terms or n-grams) ·
+  `get_google_ads_keywords` (Quality Score) · `get_google_ads_landing_pages`
+  · `get_google_ads_shopping` · `get_google_ads_change_history`
+- **Audit:** `get_google_ads_health` (0-100 score, 13 checks, spend affected)
+- **Paid and organic:** `get_paid_vs_organic` · `get_replaceable_spend`
+  (an estimate from a 2012 research prior, not a measurement) ·
+  `get_search_scorecard` (Ads, Search Console and GA4 per landing page) ·
+  `get_product_matrix` (products against target ROAS)
+
+`linked: false` means no Google Ads account is linked to the property. A
+collaborator only sees Google Ads when the owner turned it on for them.
+
 ## Reporting and sharing
 
 `generate_seo_report` (styled self-contained HTML) · `list_shared_reports` ·
 `list_report_clients` · `list_annotations`
 
-## Write tools — explicit intent only
+## Write tools: explicit intent only
 
 Never call these without the user asking, in the current conversation. A
 read-only key rejects them by design.
@@ -138,6 +174,10 @@ read-only key rejects them by design.
 - **Shopping:** `run_feed_audit` (queues a feed audit that crawls every
   product page; it can take hours, so follow up with `get_feed_audit_results`)
 - **Migrations:** `add_migration_redirects` · `delete_migration_redirects`
+- **Google Ads links:** `link_google_ads_account` (starts a 16-month import) ·
+  `sync_google_ads` (imports pending data now) · `unlink_google_ads_account`
+  (deletes the Google Ads data GSC Wizard stored for the property). None of
+  them changes the Google Ads account.
 
 `bulk_inspect_urls` is worth flagging even when a write key is present: it
 spends a limited daily quota. Check `get_inspection_quota` first and tell the

@@ -45,8 +45,8 @@ The plugin bundles:
 | --- | --- | --- |
 | MCP server | `.mcp.json` | Remote GSC Wizard server registration |
 | Agent | `agents/seo-analyst.md` | Specialized SEO analyst subagent |
-| Skills | `skills/` | **gsc-wizard-mcp** (how to use the MCP: tool choice, dates, row caps, scope, errors & a full tool map), then the workflows: weekly-seo-report, ranking-changes, cannibalization, content-decay, ctr-opportunities, seo-opportunities |
-| Commands | `commands/` | `/gsc-report`, `/gsc-rankings`, `/gsc-decay`, `/gsc-cannibalization`, `/gsc-opportunities` |
+| Skills | `skills/` | **gsc-wizard-mcp** (how to use the MCP: tool choice, dates, row caps, scope, errors & a full tool map), then the workflows: weekly-seo-report, ranking-changes, cannibalization, content-decay, ctr-opportunities, seo-opportunities, and for Google Ads: google-ads-audit, paid-vs-organic, ads-search-terms, ads-product-matrix |
+| Commands | `commands/` | `/gsc-report`, `/gsc-rankings`, `/gsc-decay`, `/gsc-cannibalization`, `/gsc-opportunities`, `/gsc-ads-audit`, `/gsc-paid-organic`, `/gsc-ads-negatives`, `/gsc-ads-products` |
 | Manifest | `.grok-plugin/plugin.json` | Plugin metadata |
 
 To put these on a schedule for things like daily exception watch, weekly diagnosis,
